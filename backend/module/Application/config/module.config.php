@@ -39,6 +39,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
+            Controller\PruebaController::class => InvokableFactory::class,
         ],
     ],
     'view_manager' => [
@@ -56,5 +57,8 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
+        'strategies' =>[
+            'ViewJsonStrategy'
+        ]
     ],
 ];
