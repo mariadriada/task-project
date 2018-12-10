@@ -7,18 +7,9 @@
 namespace Database\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use Database\Model\Dao\IUserDao;
-
-
-use Zend\Db\Adapter\Adapter;
 use Zend\View\Model\JsonModel;
-use Zend\Mvc\Controller\ActionController;
-use Zend\Http;
-use Zend\Http\Request;
-
 use Database\Model\Entity\User;
-use Database\Model\Dao\UserDao;
 
 
 class UserController extends AbstractActionController

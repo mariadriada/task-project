@@ -60,7 +60,6 @@ class UserDao implements IUserDao {
     }
     
     public function delete($id) {
-        echo "llega a eliminar $id";
         if ($id > 0)
         { $this->tableGateway->delete(['id_user' => (int)$id]); }
     }
