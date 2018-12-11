@@ -2,27 +2,23 @@
 namespace Database;
 
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
-
 
 return [
     'controllers' => [        
-        'factories' => [
-           // Controller\IndexController::class => InvokableFactory::class,
-           
-            Controller\IndexController::class => Controller\ControllerFactory::class,
+        'factories' => [           
+            Controller\TaskController::class => Controller\ControllerFactory::class,
             Controller\UserController::class => Controller\ControllerFactory::class,
         ],
     ],
     'router' => [
         'routes' => [           
-            'api' => [
+            'task' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/api[/:action][/:id]',
+                    'route'    => '/task[/:action][/:id]',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\TaskController::class,
+                        'action'     => 'select',
                     ],
                 ],
             ],
@@ -32,7 +28,7 @@ return [
                     'route'    => '/user[/:action][/:id]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
-                        'action'     => 'index',
+                        'action'     => 'select',
                     ],
                 ],
             ],
@@ -42,8 +38,5 @@ return [
         'template_path_stack' => [
             'Database' => __DIR__ . '/../view',
         ],
-        /*'strategies' => [
-            'ViewJsonStrategy',
-        ]*/
     ],
 ];

@@ -21,10 +21,10 @@ class ControllerFactory  implements FactoryInterface
     {
         switch ($requestedName) {
             
-            case IndexController::class :
+            case TaskController::class :
                 $taskDao = $container->get(ITaskDao::class);
                 $dbAdapter = $container->get('adapter');
-                $controller = new IndexController($taskDao, $dbAdapter);
+                $controller = new TaskController($taskDao, $dbAdapter);
             break;
         
             case UserController::class :
