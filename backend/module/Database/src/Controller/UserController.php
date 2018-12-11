@@ -30,7 +30,7 @@ class UserController extends AbstractActionController
     }
     
     /*
-     * @brief createAction()
+     * @brief saveAction()
      * Create an user or update if exists
      */
     public function saveAction() {
