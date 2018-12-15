@@ -29,7 +29,8 @@ class ControllerFactory  implements FactoryInterface
         
             case UserController::class :
                 $userDao = $container->get(IUserDao::class);
-                $controller = new UserController($userDao);
+                $dbAdapter = $container->get('adapter');
+                $controller = new UserController($userDao, $dbAdapter);
             break;
         
             default:

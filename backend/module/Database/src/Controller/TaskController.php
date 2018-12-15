@@ -13,11 +13,11 @@ use Zend\View\Model\JsonModel;
 use Database\Model\Entity\Task;
 use Database\Model\Dao\ITaskDao;
 
-
 class TaskController extends AbstractActionController
 {
     private $taskDao;
     private $dbAdapter;
+    private $header;
  
     public function __construct(ITaskDao $taskDao, Adapter $dbAdapter) {
         $this->taskDao = $taskDao;
@@ -30,8 +30,8 @@ class TaskController extends AbstractActionController
      */
     public function selectAction() {
         
-        //Gei id to GET Method
-        $id = $this->params()->fromRoute('id', 0);
+        //Gei id to POST Method
+        $id = $this->params()->fromPost('id', 0);
         
         $sql = "call sp_SelectTasks('$id')";        
         $statement = $this->dbAdapter->query($sql);
@@ -41,7 +41,7 @@ class TaskController extends AbstractActionController
         $returnArray[] = $result;
         }
         
-        return new JsonModel(['task' => $returnArray, 'idtask' => $id]);
+        return new JsonModel(['task' => $returnArray, 'status' => true]);       
     }
     
     /*
@@ -49,16 +49,16 @@ class TaskController extends AbstractActionController
      * Create an task or update if exists
      */
     public function saveAction() {
-        
+            
         $status = false;
         
         if ($this->getRequest()->isPost())
         {   
-            $id = $this->params()->fromQuery('id', 0);
-            $name = $this->params()->fromQuery('name', '');
-            $priority = $this->params()->fromQuery('priority', '');
-            $expiration = $this->params()->fromQuery('expiration', '');
-            $idUser = $this->params()->fromQuery('idUser', 'task');
+            $id = $this->params()->fromPost('id', 0);
+            $name = $this->params()->fromPost('name', '');
+            $priority = $this->params()->fromPost('priority', '');
+            $expiration = $this->params()->fromPost('expiration', '');
+            $idUser = $this->params()->fromPost('idUser', 0);
 
             $task = new Task();
             $task->setID($id);
@@ -66,12 +66,12 @@ class TaskController extends AbstractActionController
             $task->setExpiration($expiration);
             $task->setPriority($priority);
             $task->setIdUser($idUser);
-            
+                        
             //save
             $this->taskDao->save($task);
         }
         else { return new JsonModel(array('status' => $status)); }
-        
+                                  
         // Validate insert       
         if ( $id == 0 && $this->taskDao->lastInsertValue() > 0) {
             $status = true;                
@@ -83,7 +83,8 @@ class TaskController extends AbstractActionController
             if ( $row->getName() == $name ) { $status = true; }
         }
         
-        return new JsonModel(array('status' => $status));       
+        return new JsonModel(array('status' => $status,
+                                'idnew' => $this->taskDao->lastInsertValue() ));       
     }
     
     /*
@@ -94,7 +95,7 @@ class TaskController extends AbstractActionController
         
         if ($this->getRequest()->isPost())
         { 
-            $id = $this->params()->fromQuery('id', 0);  
+            $id = $this->params()->fromPost('id', 0);  
             if ( $id <= 0 ) { return new JsonModel(array('status' => false)); }
         }        
         

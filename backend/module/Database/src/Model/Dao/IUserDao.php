@@ -19,5 +19,5 @@ interface IUserDao {
     
     public function lastInsertValue();
     
-    public function updateSesionUser(User $user);    
+    public function updateSesionUser(User $user);  
 }

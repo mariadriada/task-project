@@ -74,5 +74,5 @@ class UserDao implements IUserDao {
             'connected' => $user->getConnected()
         ];
         $this->tableGateway->update($data, ['id_user' => $user->getId()]);
-    }
+    }    
 }
