@@ -1,57 +1,33 @@
-import Task from '../class/task.js'
+// Main app
+
 import Aut from '../components/autentication.js'
 import Tasks from '../components/task.js'
+import User from '../components/user.js'
+import Alert from '../components/alert.js'
 
-
-  const movieCard = {
-    props: ['image', 'title'],
-    template: `
-        <div>
-        <img width="100" v-bind:src="image" v-bind:alt="title"/>
-        <h2>{{ title }}</h2>  
-        </div>
-    `,
-  }
-
-
-
-//Vue.component('movie-card', movieCard)
+//Registry components
 Vue.component('aut', Aut)
 Vue.component('tasks', Tasks)
+Vue.component('alert', Alert)
+Vue.component('date-picker', VueBootstrapDatetimePicker);
 
-  const routes = [
-    { path: '/task', component: Tasks },
-    { path: '/aut', component: Aut }
-  ]
-  
-  const router = new VueRouter({
-    routes // short for `routes: routes`
-  })
+// Routes
+const routes = [   
+  { path: '/', component: Aut },
+  { path: '/task', component: Tasks },
+  { path: '/user', component: User },
+]
+const router = new VueRouter({
+  routes
+})
 
-
+// Load app
 const app = new Vue({
   router,
  
   data() {
     return{
-      'title': 'Gestión de tareas',
-      'sesion': localStorage.session,      
-    }
-  },
-  mounted() {
-    localStorage.session = true
-    localStorage.type = ''
-    localStorage.id = 0
-    if (localStorage.name) {
-      this.name = localStorage.name;
-    }
-  },
-  watch: {
-    name(newSession) {
-      localStorage.session = newSession;
-    },
-    id(id) {
-      localStorage.id = id;
+      'title': 'Gestión de tareas',        
     }
   }
 

@@ -1,8 +1,9 @@
+// Component to login
 
  const Aut = {
     template :  ` 
     <div>   
-    <b-modal v-model="modalShow"
+    <b-modal v-model="modalShow" no-close-on-backdrop no-close-on-esc 
              title="Ingreso al sistema"
              :header-bg-variant="headerBgVariant"
              :header-text-variant="headerTextVariant"
@@ -11,21 +12,7 @@
              :footer-bg-variant="footerBgVariant"
              :footer-text-variant="footerTextVariant">
        <b-container fluid>   
-
-       <!--Verificar contraseña-->
-       <b-alert :show="dismissCountDown"
-                dismissible
-                variant="danger"
-                @dismissed="dismissCountDown=0"
-                @dismiss-count-down="countDownChanged">
-         <p>{{ messageError }}</p>
-         <b-progress variant="danger"
-                     :max="dismissSecs"
-                     :value="dismissCountDown"
-                     height="4px">
-         </b-progress>
-       </b-alert>
-       
+     
         <section v-if="session===false">      
         <p>{{ description }}</p> 
         <p>{{ admin }}</p> 
@@ -44,25 +31,17 @@
                 </b-form-group>
                 <b-form-group 
                                 label="Contraseña:">
-                    <b-form-input 
+                        <b-form-input 
                                 type="password"
                                 v-model="form.passwd"
                                 required
                                 placeholder="Ingrese su contraseña">
-                    </b-form-input>        
-                </b-form-group>
-                <b-form-group 
-                                label="Confirmación de contraseña:">
-                    <b-form-input 
-                                type="password"
-                                v-model="form.cpasswd"
-                                required
-                                placeholder="Confirme su contraseña">
-                    </b-form-input>        
-                </b-form-group>    
+                        </b-form-input>   
+                         
+                </b-form-group>               
                 
-                <b-button type="submit" variant="primary">Submit</b-button>
-                <b-button type="reset" variant="danger">Reset</b-button>
+                <b-button type="submit" variant="primary">Ingresar</b-button>
+                <b-button type="reset" variant="danger">Limpiar</b-button>
             </b-form>
         </div>
         </section>    
@@ -75,7 +54,7 @@
     
     data () {
         return {
-            show: false,
+            show: true,
             variants: [
               'primary', 'secondary', 'success', 'warning', 'danger', 'info', 'light', 'dark'
             ],
@@ -94,25 +73,14 @@
             form: {
                 email: '',
                 name: ''                        
-            },
-            show: true,
-            dismissSecs: 5,
-            dismissCountDown: 0,
-            showDismissibleAlert: false
+            },        
           }
     },
     methods: {
         onSubmit (evt) {
         evt.preventDefault()
         this.clearSession()
-
-        //Validar contraseña
-        if( this.form.passwd != this.form.cpasswd ) {
-            this.messageError = 'Confirmación de contraseña incorrecta.'
-            this.showAlert();
-            return
-        }
-
+      
         //Parameeters
         const param = new URLSearchParams()
         param.append('email', this.form.email)
@@ -125,24 +93,17 @@
             if ( response.status == 200 )
             {
                 if (response.data.status) {
-                    console.log('correcto')
-                    console.log("status", response.data.status)
-                    console.log("type", response.data.type)
-                    localStorage.session = true
-                    console.log('Validar ', localStorage.session)
-                    this.$nextTick(() => { 
-                        console.log('Pasar a las tareas')
-                     })
-                   
+                    localStorage.setItem('session', true)
+                    localStorage.setItem('id', response.data.id)
+                    localStorage.setItem('type', response.data.type)
+
+                    //Open task page
+                    this.$router.push('/task')                  
                 }
                 else {
                     this.messageError = 'Usuario o Contraseña incorrecto.'
                     this.showAlert();
                 }
-               
-                this.$nextTick(() => { 
-                    console.log('abrir tareas')
-                    })
             }
             }).catch((error) => {
                 console.log('Error', error)
@@ -165,7 +126,7 @@
         this.dismissCountDown = this.dismissSecs
         },
         clearSession() {
-            localStorage.session = ''
+            localStorage.session = false
             localStorage.id = 0
             localStorage.type = ''
         }

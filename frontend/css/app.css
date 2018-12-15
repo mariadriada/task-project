@@ -6,6 +6,11 @@
 }
 
 .form-container {
-    width: 80%;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.form2-container {
+    width: 50%;
     margin: 0 auto;
 }
