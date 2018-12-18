@@ -33,7 +33,15 @@ class UserDao implements IUserDao {
         return $row;
     }
     
-    public function save(User $user) {    
+    public function save(User $user) {  
+        
+        $rowset = $this->tableGateway->select(['email_user'=> $user->getEmail()]);
+        $row = $rowset->current();
+               
+        // If user exists, then is not created
+        if ( $row ) {
+            return "exists";
+        }
         
         $data = [
             'id_user' => $user->getId(),

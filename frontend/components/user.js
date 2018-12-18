@@ -114,21 +114,21 @@ const User = {
                 
                     this.typeMessage = 'success'
                     this.message = 'Usuario creado correctamente!'
-                    this.showAlert();
+                    this.showAlert()
                 }
                 else {
-                    this.message = 'Hubo un error al crear el usuario. Por favor intente de nuevo.'
-                    this.showAlert();
+                    this.message = response.data.msj
+                    this.showAlert()
                 }
             }
         },
         onSubmit (evt) {
             evt.preventDefault()
 
-            //Validar contraseña
+            //Validate password
             if( this.form.passwd != this.form.cpasswd ) {
                 this.message = 'Confirmación de contraseña incorrecta.'
-                this.showAlert();
+                this.showAlert()
                 return
             }
 

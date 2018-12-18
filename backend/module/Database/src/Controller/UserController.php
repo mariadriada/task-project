@@ -53,10 +53,16 @@ class UserController extends AbstractActionController
             $user->setPasswd($passwd);
             $user->setType($type);
 
-            $this->userDao->save($user);            
+            $exists = $this->userDao->save($user);  
         }
-        else { return new JsonModel(array('status' => $status)); }
+        else { return new JsonModel(array('status' => $status)); }  
         
+        // Validate exists user
+        if ( $exists == 'exists' ) {
+            return new JsonModel(array('status' => $status, 
+                                        'msj' => 'El email ya se encuentra registrado'));     
+        }
+               
         // Validate insert       
         if ( $id == 0 && $this->userDao->lastInsertValue() > 0) {
             $status = true;                
