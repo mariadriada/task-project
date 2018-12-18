@@ -47,7 +47,7 @@ const Tasks = {
 
                 <!-- Task form -->
                 <section class="form">
-                    <form action="" class="text-center"> 
+                    <b-form @submit="createTask" >
                         <b-form-input 
                                     type="text"
                                     v-model="name"
@@ -60,23 +60,19 @@ const Tasks = {
                                 required
                                 placeholder="Prioridad de la nueva tarea">
                         </b-form-input> 
-                        <!--<b-form-input 
-                                type="text"
-                                v-model="expiration"
-                                required                               
-                                placeholder="Vencimiento de la nueva tarea">
-                        </b-form-input>-->
+                        
                         <div class="row">                            
                             <div class="col-md-12" >
                                 Fecha de vencimiento
-                                <date-picker v-model="expiration" :config="{format: 'YYYY-MM-DD'}"></date-picker>
+                                <date-picker v-model="expiration" :config="{format: 'YYYY-MM-DD'}">
+                                </date-picker>
                             </div>
                         </div>   
 
-                        <!-- Botón para añadir -->
-                        <br/>
-                        <input @click="createTask" type="submit" value="Añadir" class="btn btn-success">
-                    </form>
+                        <!-- Button to add -->
+                        <br/>                        
+                        <b-button type="submit" variant="primary">Ingresar</b-button>                   
+                    </b-form>
                 </section>
 
             </b-container>
@@ -212,9 +208,8 @@ const Tasks = {
             }
         },
         //Create or update a task
-        createTask: function (evt) {
+        createTask: function (evt) {            
             evt.preventDefault()
-            //let taskObj = new Task(localStorage.id)
             this.taskObj.createTask(this.name, this.priority, this.expiration, 0, this.taskListUpdate)
         },
         // Show update form
@@ -281,12 +276,17 @@ const Tasks = {
     async mounted(){
         this.type = localStorage.getItem('type')
         this.session = localStorage.getItem('session')
+
+        // Set current date in expiration
+        this.expiration = moment().toDate()
+
+        //Tasks
         let taskObj = new TaskHttp(localStorage.id)   
         this.taskObj = taskObj    
+
         // Set task list
         await this.taskObj.selectAll(this.setTaskList)
-    }
-        
+    }        
 }
 
 export default Tasks
